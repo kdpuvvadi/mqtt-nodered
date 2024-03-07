@@ -1,0 +1,31 @@
+---
+version: "3.3"
+services:
+  mosquitto:
+    container_name: mqtt
+    image: eclipse-mosquitto:latest
+    stdin_open: true
+    tty: true
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./data/mosquitto:/mosquitto/data
+      - ./logs:/mosquitto/logs/
+    networks:
+      - mqtt
+
+  nodered:
+    container_name: node-red
+    image: nodered/node-red:latest
+    volumes:
+      - ./data/nodered:/data
+    ports:
+      - 1880:1880
+    networks:
+      - mqtt
+
+networks:
+  mqtt:
+    external: true
